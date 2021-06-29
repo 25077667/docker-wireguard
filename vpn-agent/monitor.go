@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
 	"sync"
 	"time"
 
@@ -13,8 +15,9 @@ import (
 )
 
 var cpu_info_lock sync.RWMutex
-
 var cpu_rate float64
+
+var logger = log.New(os.Stdout, "[DEBUG]", log.Ltime)
 
 func get_cpu() {
 	for {
@@ -53,6 +56,11 @@ func get_sys_info() []byte {
 	return s
 }
 
+func init() {
+	logfile, _ := os.OpenFile("testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logger.SetOutput(logfile)
+}
+
 func main() {
 	go get_cpu()
 	app := fiber.New()
@@ -62,7 +70,10 @@ func main() {
 	app.Get("/peer:id?", func(c *fiber.Ctx) error {
 		id := c.Params("id") // Suppose it is a string of int
 		path := fmt.Sprintf("/config/peer%s/peer%s.conf", id, id)
-		ctx, _ := ioutil.ReadFile(path) // give Sendfile to check if the file is exist
+		ctx, err := ioutil.ReadFile(path) // give Sendfile to check if the file is exist
+		if err != nil {
+			logger.Println(err)
+		}
 		return c.Send(ctx)
 	})
 
