@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"sync"
 	"time"
 
@@ -61,7 +62,8 @@ func main() {
 	app.Get("/peer:id?", func(c *fiber.Ctx) error {
 		id := c.Params("id") // Suppose it is a string of int
 		path := fmt.Sprintf("/config/peer%s/peer%s.conf", id, id)
-		return c.SendFile(path) // give Sendfile to check if the file is exist
+		ctx, _ := ioutil.ReadFile(path) // give Sendfile to check if the file is exist
+		return c.Send(ctx)
 	})
 
 	app.Listen(":8080")
