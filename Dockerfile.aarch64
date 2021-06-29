@@ -67,7 +67,7 @@ FROM golang:alpine AS builder
 RUN apk --no-cache add libcap ca-certificates
 COPY ./vpn-agent /src/vpn-agent
 WORKDIR /src/vpn-agent
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o agent vpn-agent/monitor.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o agent monitor.go
 
 
 FROM base
