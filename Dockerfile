@@ -1,4 +1,5 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:bionic
+FROM ghcr.io/linuxserver/baseimage-ubuntu:bionic AS base
+LABEL maintainer="zxc25077667@pm.me"
 
 # set version label
 ARG BUILD_DATE
@@ -62,5 +63,27 @@ RUN \
 # add local files
 COPY /root /
 
-# ports and volumes
+# build the agent
+FROM golang:alpine AS builder
+RUN apk --no-cache add libcap ca-certificates
+COPY ./vpn-agent /src/vpn-agent
+WORKDIR /src/vpn-agent
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o agent vpn-agent/monitor.go
+
+
+FROM base
+COPY --from=builder /src/vpn-agent/agent /app
+ENV PUID=1000
+ENV PGID=1000
+ENV TZ=Asia/Taipei
+ENV SERVERPORT=51820
+ENV PEERDNS=auto
+ENV INTERNAL_SUBNET=10.13.13.0
+ENV ALLOWEDIPS=0.0.0.0/0
+
+# for agent
+EXPOSE 8080
+# for vpn service
 EXPOSE 51820/udp
+
+VOLUME [ "/lib/modules" ]

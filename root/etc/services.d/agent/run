@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+_term() {
+  echo "Caught SIGTERM signal!"
+}
+
+trap _term SIGTERM
+
+/app/agent &
+
+sleep infinity &
+
+wait
