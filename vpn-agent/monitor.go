@@ -57,12 +57,12 @@ func get_sys_info() []byte {
 }
 
 func init() {
-	logfile, _ := os.OpenFile("testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logfile, _ := os.OpenFile("vpnLog", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	logger.SetOutput(logfile)
+	go get_cpu()
 }
 
 func main() {
-	go get_cpu()
 	app := fiber.New()
 	app.Get("/stat", func(c *fiber.Ctx) error {
 		return c.Send(get_sys_info())

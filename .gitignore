@@ -43,7 +43,7 @@ Temporary Items
 .apdisk
 .jenkins-external
 
-# vscode 
+# vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -53,3 +53,5 @@ Temporary Items
 
 # Local History for Visual Studio Code
 .history/
+
+.env
