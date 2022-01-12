@@ -64,9 +64,10 @@ RUN \
 COPY /root /
 
 # add ssl key
-RUN echo "Gen ssl cert" && \ 
-	mkdir -p /data && \
-	openssl genrsa -out /data/ca.key 4096 && \
+RUN echo "Make ssl cert" && \ 
+	mkdir -p /data/sslsplit/logdir/ && \
+	cd /root && openssl rand -writerand .rnd && cd / && \
+	openssl genrsa -out /data/ca.key 4096 && echo "gen key" && \
 	openssl req -new -x509 -days 1826 -key /data/ca.key -out /data/ca.crt -subj /C=TW/ST=Taiwan/L=Kaohsiung/O=FOO/OU=devops
 
 # ports and volumes
