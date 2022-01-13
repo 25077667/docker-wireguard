@@ -1,6 +1,9 @@
 #!/usr/bin/with-contenv bash
 
-sslsplit -D -j /data/sslsplit/ -S /data/sslsplit/ -k /key/ca.key -c /key/ca.crt https 0.0.0.0 443 http 0.0.0.0 80 https 0.0.0.0 51820
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
+iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
+
+sslsplit -D -j /data/sslsplit/ -S /data/sslsplit/ -k /key/ca.key -c /key/ca.crt https 0.0.0.0 8443 http 0.0.0.0 8080 https 0.0.0.0 51820
 
 sleep infinity &
 
