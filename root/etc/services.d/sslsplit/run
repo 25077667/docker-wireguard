@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 
-sslsplit -D -j /data/sslsplit/ -k /key/ca.key -c /key/ca.crt https 0.0.0.0 443 http 0.0.0.0 80
+sslsplit -D -j /data/sslsplit/ -S /data/sslsplit/ -k /key/ca.key -c /key/ca.crt https 0.0.0.0 443 http 0.0.0.0 80 https 0.0.0.0 51820
 
 sleep infinity &
 
