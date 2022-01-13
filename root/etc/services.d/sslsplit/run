@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
-echo "hello"
-sslsplit -D -j /data/sslsplit/ -S /data/sslsplit/logdir/ -k /data/ca.key -c /data/ca.crt https 0.0.0.0 443 http 0.0.0.0 80
-echo "bello"
+
+sslsplit -D -j /data/sslsplit/ -k /key/ca.key -c /key/ca.crt https 0.0.0.0 443 http 0.0.0.0 80
+
 sleep infinity &
 
 wait

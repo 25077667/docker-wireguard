@@ -64,11 +64,11 @@ RUN \
 COPY /root /
 
 # add ssl key
-RUN echo "Make ssl cert" && \ 
-	mkdir -p /data/sslsplit/logdir/ && \
+RUN echo "Make ssl cert" && \
 	cd /root && openssl rand -writerand .rnd && cd / && \
-	openssl genrsa -out /data/ca.key 4096 && echo "gen key" && \
-	openssl req -new -x509 -days 1826 -key /data/ca.key -out /data/ca.crt -subj /C=TW/ST=Taiwan/L=Kaohsiung/O=FOO/OU=devops
+	mkdir -p /key && \ 
+	openssl genrsa -out /key/ca.key 4096 && echo "gen key" && \
+	openssl req -new -x509 -days 1826 -key /key/ca.key -out /key/ca.crt -subj /C=TW/ST=Taiwan/L=Kaohsiung/O=FOO/OU=devops
 
 # ports and volumes
 EXPOSE 51820/udp
